@@ -3,25 +3,21 @@ from web3 import Web3
 import os, json
 from dotenv import load_dotenv
 
-load_dotenv()
-
 app = Flask(__name__, static_folder="front_end", static_url_path="")
 
+load_dotenv()
 INFURA_URL = os.getenv("INFURA_URL")
 CONTRACT_ADDRESS = os.getenv("CONTRACT_ADDRESS")
 
 web3 = Web3(Web3.HTTPProvider(INFURA_URL))
+print("Connected:", web3.is_connected())
 
 with open("abi.json") as f:
     abi = json.load(f)
 
-contract = web3.eth.contract(address=CONTRACT_ADDRESS, abi=abi)
+contract = web3.eth.contract(address=Web3.to_checksum_address(CONTRACT_ADDRESS), abi=abi)
 
-@app.route("/")
-def home():
-    return send_from_directory("front_end", "index.html")
-
-@app.route("/verify", methods=["GET"])
+@app.route("/verify")
 def verify_certificate():
     code = request.args.get("code")
     if not code:
@@ -43,7 +39,16 @@ def verify_certificate():
         if not valid:
             return send_from_directory("front_end", "invalid.html")
 
-        # ✅ Mobile-friendly verified page
+        # 🔍 Find matching event (to get transaction hash)
+        tx_hash = None
+        event_filter = contract.events.CertificateIssued.create_filter(fromBlock=0, toBlock='latest')
+        events = event_filter.get_all_entries()
+        for e in events:
+            if e.args.code == cert_code:
+                tx_hash = e.transactionHash.hex()
+                break
+
+        # ✅ Display everything in a mobile-friendly HTML
         return f"""
         <!DOCTYPE html>
         <html lang="en">
@@ -64,7 +69,8 @@ def verify_certificate():
                     <p><strong>Date:</strong> {eventdate}</p>
                     <p><strong>Issued By:</strong> {issuedBy}</p>
                     <p><strong>Issuer Address:</strong> {issuer}</p>
-                    <p><small>Timestamp: {timestamp}</small></p>
+                    <p><small>Timestamp:</small> {timestamp}</p>
+                    {"<p><strong>Transaction:</strong> <a href='https://sepolia.etherscan.io/tx/" + tx_hash + "' target='_blank'>" + tx_hash + "</a></p>" if tx_hash else ""}
                 </div>
                 <a href="/" class="btn">Verify Another</a>
             </div>
@@ -75,12 +81,3 @@ def verify_certificate():
     except Exception as e:
         print("Verification error:", e)
         return send_from_directory("front_end", "invalid.html")
-
-
-@app.route("/<path:path>")
-def static_files(path):
-    return send_from_directory("front_end", path)
-
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)

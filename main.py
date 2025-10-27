@@ -7,6 +7,7 @@ export_path = ""
 event_name = "DESIGNX"
 event_date = "25/11/2025"
 issued_by = "Inspira IEDC, Marian Engineering College"
+PREFIX = "AFS"
 
 bf = Helper()
 bc = BlockChain()
@@ -20,9 +21,9 @@ for file in os.listdir(folder_path):
         continue
 
     name = os.path.splitext(file)[0]
-    code = bf.UniCode("TXT")
+    code = bf.UniCode(PREFIX)
     
     BCcode = bc.issue_certificate(name, code, event_name, event_date, issued_by)
-    qr = bf.makeQR(code)
+    qr = bf.makeQR(f"https://certiscanner.onrender.com/verify?code={code}")
     bf.placeQR(file_path, qr, code, X=1465, Y=379)
 
