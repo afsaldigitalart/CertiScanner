@@ -48,4 +48,5 @@ class BlockChain:
 
 
         print(f"Certificate {code} issued for {name}")
+        
         return tx_hash_hex

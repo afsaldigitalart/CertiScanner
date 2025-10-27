@@ -38,6 +38,9 @@ def verify_certificate():
 
     try:
 
+        with open ("temp.txt", "w") as f:
+            hash = f.readline()
+
         cert_data = contract.functions.verifyCertificate(code).call()
 
         (
@@ -75,7 +78,7 @@ def verify_certificate():
                     <p><strong>Issued By:</strong> {issuedBy}</p>
                     <p><strong>Issuer Address:</strong> {issuer}</p>
                     <p><small>Timestamp:</small> {timestamp}</p>
-                    <p><small>Transaction Code: </small>  <a href = "https://etherscan.io/tx/{BCcode}"> {BCcode} </a> </p>
+                    <p><small>Transaction Code: </small>  <a href = "https://etherscan.io/tx/{hash}"> {hash} </a> </p>
                 </div>
                 <a href="/" class="btn">Verify Another</a>
             </div>
