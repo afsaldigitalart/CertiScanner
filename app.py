@@ -29,16 +29,14 @@ def home():
 
 @app.route("/verify", methods=["GET"])
 def verify_certificate():
-
     code = request.args.get("code")
 
     if not code:
         return send_from_directory("front_end", "invalid.html")
 
     try:
-
-        with open ("temp.txt", "w") as f:
-            hash = f.readline()
+        with open("temp.txt", "r") as f:
+            tx_hash = f.readline().strip()
 
         cert_data = contract.functions.verifyCertificate(code).call()
 
@@ -77,17 +75,19 @@ def verify_certificate():
                     <p><strong>Issued By:</strong> {issuedBy}</p>
                     <p><strong>Issuer Address:</strong> {issuer}</p>
                     <p><small>Timestamp:</small> {timestamp}</p>
-                    <p><small>Transaction Code: </small>  <a href = "https://etherscan.io/tx/{hash}"> {hash} </a> </p>
+                    <p><small>Transaction:</small> 
+                        <a href="https://sepolia.etherscan.io/tx/{tx_hash}" target="_blank">{tx_hash}</a>
+                    </p>
                 </div>
                 <a href="/" class="btn">Verify Another</a>
             </div>
         </body>
         </html>
         """
-
     except Exception as e:
         print("⚠️ Error verifying certificate:", e)
         return send_from_directory("front_end", "invalid.html")
+
 
 
 @app.route("/<path:path>")
