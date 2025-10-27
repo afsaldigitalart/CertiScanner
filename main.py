@@ -1,0 +1,28 @@
+import os
+from BlockFunctions import Helper
+from BlockChain import BlockChain
+
+folder_path = r"C:\Users\afsal\OneDrive\Desktop\DUMMY"
+export_path = ""
+event_name = "DESIGNX"
+event_date = "25/11/2025"
+issued_by = "Inspira IEDC, Marian Engineering College"
+
+bf = Helper()
+bc = BlockChain()
+
+for file in os.listdir(folder_path):
+    file_path = os.path.join(folder_path, file)
+
+    if not os.path.isfile(file_path):
+        continue
+    if not file.lower().endswith(('.png', '.jpg', '.jpeg')):
+        continue
+
+    name = os.path.splitext(file)[0]
+    code = bf.UniCode("TXT")
+    
+    BCcode = bc.issue_certificate(name, code, event_name, event_date, issued_by)
+    qr = bf.makeQR(code)
+    bf.placeQR(file_path, qr, code, X=1465, Y=379)
+

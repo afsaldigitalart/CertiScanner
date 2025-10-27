@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Certificate Verification</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    {% if error %}
+      <h2 style="color:red;">Error: {{ error }}</h2>
+    {% elif valid %}
+      <h2 style="color:green;">✅ Valid Certificate</h2>
+      <p><b>Name:</b> {{ data.name }}</p>
+      <p><b>Event:</b> {{ data.eventName }}</p>
+      <p><b>Date:</b> {{ data.eventDate }}</p>
+      <p><b>Issued by:</b> {{ data.issuedBy }}</p>
+      <p><small>Blockchain Hash: {{ data.hash }}</small></p>
+    {% else %}
+      <h2 style="color:red;">❌ Invalid Certificate</h2>
+      <p>No matching record found on blockchain.</p>
+    {% endif %}
+  </div>
+</body>
+</html>
