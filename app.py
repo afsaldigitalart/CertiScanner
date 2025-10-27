@@ -5,20 +5,17 @@ from dotenv import load_dotenv
 
 app = Flask(__name__, static_folder="front_end", template_folder="front_end")
 
-# Load environment variables
 load_dotenv()
 
 INFURA_URL = os.getenv("INFURA_URL")
 CONTRACT_ADDRESS = os.getenv("CONTRACT_ADDRESS")
 
-# Connect to blockchain
 web3 = Web3(Web3.HTTPProvider(INFURA_URL))
 print("Connected:", web3.is_connected())
 
 if not web3.is_connected():
     raise Exception("Could not connect to blockchain")
 
-# Load contract
 with open("abi.json") as f:
     abi = json.load(f)
 
@@ -27,7 +24,6 @@ contract = web3.eth.contract(
     abi=abi
 )
 
-# ---------- ROUTES ---------- #
 
 @app.route("/")
 def home():
