@@ -44,7 +44,7 @@ class BlockChain:
 
         print("Waiting for blockchain confirmation...")
         tx_receipt = self.web3.eth.wait_for_transaction_receipt(tx_hash)
-        print(f"Confirmed in block #{tx_receipt.blockNumber}")
+        print(f"▶ Confirmed in block #{tx_receipt.blockNumber}")
 
 
         print(f"Certificate {code} issued for {name}")

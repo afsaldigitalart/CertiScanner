@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 app = Flask(__name__, static_folder="front_end", static_url_path="")
 
 load_dotenv()
-
 INFURA_URL = os.getenv("INFURA_URL")
 CONTRACT_ADDRESS = os.getenv("CONTRACT_ADDRESS")
 
@@ -16,18 +15,7 @@ print("Connected:", web3.is_connected())
 with open("abi.json") as f:
     abi = json.load(f)
 
-contract = web3.eth.contract(
-    address=Web3.to_checksum_address(CONTRACT_ADDRESS),
-    abi=abi
-)
-
-@app.route("/")
-def home():
-    return send_from_directory("front_end", "index.html")
-
-@app.route("/style.css")
-def css():
-    return send_from_directory("front_end", "style.css")
+contract = web3.eth.contract(address=Web3.to_checksum_address(CONTRACT_ADDRESS), abi=abi)
 
 @app.route("/verify")
 def verify_certificate():
@@ -51,10 +39,10 @@ def verify_certificate():
         if not valid:
             return send_from_directory("front_end", "invalid.html")
 
-        # get hash from event logs
         tx_hash = None
         event_filter = contract.events.CertificateIssued.create_filter(fromBlock=0, toBlock='latest')
-        for e in event_filter.get_all_entries():
+        events = event_filter.get_all_entries()
+        for e in events:
             if e.args.code == cert_code:
                 tx_hash = e.transactionHash.hex()
                 break
@@ -80,7 +68,7 @@ def verify_certificate():
                     <p><strong>Issued By:</strong> {issuedBy}</p>
                     <p><strong>Issuer Address:</strong> {issuer}</p>
                     <p><small>Timestamp:</small> {timestamp}</p>
-                    {f"<p><strong>Transaction:</strong> <a href='https://sepolia.etherscan.io/tx/{tx_hash}' target='_blank'>{tx_hash}</a></p>" if tx_hash else ""}
+                    {"<p><strong>Transaction:</strong> <a href='https://sepolia.etherscan.io/tx/" + tx_hash + "' target='_blank'>" + tx_hash + "</a></p>" if tx_hash else ""}
                 </div>
                 <a href="/" class="btn">Verify Another</a>
             </div>
@@ -91,6 +79,3 @@ def verify_certificate():
     except Exception as e:
         print("Verification error:", e)
         return send_from_directory("front_end", "invalid.html")
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)

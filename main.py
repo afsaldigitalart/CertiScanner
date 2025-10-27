@@ -2,8 +2,7 @@ import os
 from BlockFunctions import Helper
 from BlockChain import BlockChain
 
-folder_path = r"C:\Users\afsal\OneDrive\Desktop\DUMMY"
-export_path = ""
+folder_path = r"D:\Programming Projects\blockchain\Certificates"
 event_name = "DESIGNX"
 event_date = "25/11/2025"
 issued_by = "Inspira IEDC, Marian Engineering College"
