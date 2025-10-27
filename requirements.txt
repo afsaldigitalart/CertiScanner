@@ -4,4 +4,4 @@ python-dotenv==1.2.1
 qrcode==8.2
 requests==2.32.5
 web3==7.14.0
-
+gunicorn

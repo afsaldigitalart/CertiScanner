@@ -1,24 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
   <title>Certificate Verification</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    {% if error %}
-      <h2 style="color:red;">Error: {{ error }}</h2>
-    {% elif valid %}
-      <h2 style="color:green;">✅ Valid Certificate</h2>
-      <p><b>Name:</b> {{ data.name }}</p>
-      <p><b>Event:</b> {{ data.eventName }}</p>
-      <p><b>Date:</b> {{ data.eventDate }}</p>
-      <p><b>Issued by:</b> {{ data.issuedBy }}</p>
-      <p><small>Blockchain Hash: {{ data.hash }}</small></p>
-    {% else %}
-      <h2 style="color:red;">❌ Invalid Certificate</h2>
-      <p>No matching record found on blockchain.</p>
-    {% endif %}
-  </div>
+  <div id="result">Verifying certificate...</div>
+
+  <script>
+    async function verify() {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get("code");
+      if (!code) {
+        document.getElementById("result").textContent = "No certificate code found.";
+        return;
+      }
+
+      try {
+        const res = await fetch(`/verify?code=${code}`);
+        const data = await res.json();
+
+        if (data.valid) {
+          document.getElementById("result").innerHTML = `
+            ✅ <strong>Certificate Verified!</strong><br><br>
+            <b>Name:</b> ${data.name}<br>
+            <b>Event:</b> ${data.event_name}<br>
+            <b>Code:</b> ${data.code}<br>
+            <b>Issued by:</b> ${data.issued_by}<br>
+            <b>Date:</b> ${data.event_date}
+          `;
+        } else {
+          document.getElementById("result").innerHTML = "❌ Invalid or not found.";
+        }
+      } catch (err) {
+        document.getElementById("result").textContent = "Error verifying certificate.";
+      }
+    }
+
+    verify();
+  </script>
 </body>
 </html>
