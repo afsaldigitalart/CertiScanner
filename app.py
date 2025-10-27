@@ -2,7 +2,6 @@ from flask import Flask, request, send_from_directory
 from web3 import Web3
 import os, json
 from dotenv import load_dotenv
-from main import BCcode
 
 load_dotenv()
 
