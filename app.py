@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string, request, send_from_directory, jsonify
+from flask import Flask, request, send_from_directory, jsonify
 from web3 import Web3
 import json, os
 from dotenv import load_dotenv
@@ -11,17 +11,21 @@ load_dotenv()
 INFURA_URL = os.getenv("INFURA_URL")
 CONTRACT_ADDRESS = os.getenv("CONTRACT_ADDRESS")
 
-# Connect to Web3
+# Connect to blockchain
 web3 = Web3(Web3.HTTPProvider(INFURA_URL))
 print("Connected:", web3.is_connected())
 
 if not web3.is_connected():
-    raise Exception("Failed to connect to blockchain")
+    raise Exception("Could not connect to blockchain")
 
+# Load contract
 with open("abi.json") as f:
     abi = json.load(f)
 
-contract = web3.eth.contract(address=Web3.to_checksum_address(CONTRACT_ADDRESS), abi=abi)
+contract = web3.eth.contract(
+    address=Web3.to_checksum_address(CONTRACT_ADDRESS),
+    abi=abi
+)
 
 # ---------- ROUTES ---------- #
 
@@ -35,31 +39,40 @@ def style():
 
 @app.route("/verify", methods=["GET"])
 def verify_certificate():
-    # Example: /verify?code=ABC123
-    cert_code = request.args.get("code")
-    if not cert_code:
+    code = request.args.get("code")
+    if not code:
         return jsonify({"error": "Missing certificate code"}), 400
 
     try:
-        # Contract function that fetches details by code
-        cert_data = contract.functions.certificates(cert_code).call()
+        cert_data = contract.functions.verifyCertificate(code).call()
 
-        name, code, event_name, event_date, issued_by, is_valid = cert_data
+        (
+            name,
+            cert_code,
+            eventname,
+            eventdate,
+            issuedBy,
+            issuer,
+            timestamp,
+            valid
+        ) = cert_data
 
-        if not is_valid:
-            return jsonify({"valid": False, "message": "Certificate revoked or invalid"})
+        if not valid:
+            return jsonify({"valid": False, "message": "Certificate not found"})
 
         return jsonify({
             "valid": True,
             "name": name,
-            "code": code,
-            "event_name": event_name,
-            "event_date": event_date,
-            "issued_by": issued_by
+            "code": cert_code,
+            "event_name": eventname,
+            "event_date": eventdate,
+            "issued_by": issuedBy,
+            "issuer": issuer,
+            "timestamp": timestamp
         })
 
     except Exception as e:
-        print("Error verifying certificate:", e)
+        print("Verification error:", e)
         return jsonify({"valid": False, "error": str(e)}), 500
 
 
