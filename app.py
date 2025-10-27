@@ -2,20 +2,18 @@ from flask import Flask, request, send_from_directory
 from web3 import Web3
 import os, json
 from dotenv import load_dotenv
+import main
 
-# Load environment variables
 load_dotenv()
 
 app = Flask(__name__, static_folder="front_end", static_url_path="")
 
-# Blockchain connection
 INFURA_URL = os.getenv("INFURA_URL")
 CONTRACT_ADDRESS = os.getenv("CONTRACT_ADDRESS")
 
 web3 = Web3(Web3.HTTPProvider(INFURA_URL))
 print("✅ Connected to blockchain:", web3.is_connected())
 
-# Load contract ABI
 with open("abi.json") as f:
     abi = json.load(f)
 
@@ -27,13 +25,12 @@ contract = web3.eth.contract(
 
 @app.route("/")
 def home():
-    """Serve homepage"""
     return send_from_directory("front_end", "index.html")
 
 
 @app.route("/verify", methods=["GET"])
 def verify_certificate():
-    """Verify certificate by unique code"""
+
     code = request.args.get("code")
 
     if not code:
@@ -61,7 +58,6 @@ def verify_certificate():
             print("❌ Certificate not valid or not found")
             return send_from_directory("front_end", "invalid.html")
 
-        # ✅ Verified page (mobile-friendly)
         return f"""
         <!DOCTYPE html>
         <html lang="en">
@@ -83,6 +79,7 @@ def verify_certificate():
                     <p><strong>Issued By:</strong> {issuedBy}</p>
                     <p><strong>Issuer Address:</strong> {issuer}</p>
                     <p><small>Timestamp:</small> {timestamp}</p>
+                    <p><small>Transaction Code: </small>  <a href = "https://etherscan.io/tx/{main.BCcode}"> {main.BCcode} </a> </p>
                 </div>
                 <a href="/" class="btn">Verify Another</a>
             </div>
@@ -97,15 +94,13 @@ def verify_certificate():
 
 @app.route("/<path:path>")
 def static_files(path):
-    """Serve static files (CSS, etc.)"""
     return send_from_directory("front_end", path)
 
 
 @app.errorhandler(404)
 def not_found(e):
-    """Fallback for invalid URLs"""
-    return send_from_directory("front_end", "invalid.html")
 
+    return send_from_directory("front_end", "invalid.html")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
