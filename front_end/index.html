@@ -1,44 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Certificate Verification</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>Certificate Verifier</title>
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <div id="result">Verifying certificate...</div>
-
-  <script>
-    async function verify() {
-      const params = new URLSearchParams(window.location.search);
-      const code = params.get("code");
-      if (!code) {
-        document.getElementById("result").textContent = "No certificate code found.";
-        return;
-      }
-
-      try {
-        const res = await fetch(`/verify?code=${code}`);
-        const data = await res.json();
-
-        if (data.valid) {
-          document.getElementById("result").innerHTML = `
-            ✅ <strong>Certificate Verified!</strong><br><br>
-            <b>Name:</b> ${data.name}<br>
-            <b>Event:</b> ${data.event_name}<br>
-            <b>Code:</b> ${data.code}<br>
-            <b>Issued by:</b> ${data.issued_by}<br>
-            <b>Date:</b> ${data.event_date}
-          `;
-        } else {
-          document.getElementById("result").innerHTML = "❌ Invalid or not found.";
-        }
-      } catch (err) {
-        document.getElementById("result").textContent = "Error verifying certificate.";
-      }
-    }
-
-    verify();
-  </script>
+  <div class="container">
+    <div class="icon">🔍</div>
+    <h1>Verify Certificate</h1>
+    <form action="/verify" method="get">
+      <input type="text" name="code" placeholder="Enter certificate code" required
+        style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;font-size:1rem;margin-top:10px;">
+      <button type="submit" class="btn" style="width:100%;margin-top:12px;">Check</button>
+    </form>
+  </div>
 </body>
 </html>
