@@ -2,7 +2,7 @@ from flask import Flask, request, send_from_directory
 from web3 import Web3
 import os, json
 from dotenv import load_dotenv
-import main
+from main import BCcode
 
 load_dotenv()
 
@@ -37,7 +37,6 @@ def verify_certificate():
         return send_from_directory("front_end", "invalid.html")
 
     try:
-        print(f"🔍 Checking blockchain for certificate code: {code}")
 
         cert_data = contract.functions.verifyCertificate(code).call()
 
@@ -52,10 +51,7 @@ def verify_certificate():
             valid
         ) = cert_data
 
-        print("📦 Blockchain returned:", cert_data)
-
         if not valid or cert_code == "":
-            print("❌ Certificate not valid or not found")
             return send_from_directory("front_end", "invalid.html")
 
         return f"""
@@ -79,7 +75,7 @@ def verify_certificate():
                     <p><strong>Issued By:</strong> {issuedBy}</p>
                     <p><strong>Issuer Address:</strong> {issuer}</p>
                     <p><small>Timestamp:</small> {timestamp}</p>
-                    <p><small>Transaction Code: </small>  <a href = "https://etherscan.io/tx/{main.BCcode}"> {main.BCcode} </a> </p>
+                    <p><small>Transaction Code: </small>  <a href = "https://etherscan.io/tx/{BCcode}"> {BCcode} </a> </p>
                 </div>
                 <a href="/" class="btn">Verify Another</a>
             </div>
