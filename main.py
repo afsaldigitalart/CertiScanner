@@ -13,7 +13,6 @@ tx_hash_file = 'tx_hashes.json'
 bf = Helper()
 bc = BlockChain()
 
-
 if os.path.exists(tx_hash_file):
     with open(tx_hash_file, 'r') as f:
         tx_hashes = json.load(f)
@@ -42,6 +41,9 @@ for file in os.listdir(folder_path):
     
     qr = bf.makeQR(f"https://certiscanner.onrender.com/verify?code={code}")
     bf.placeQR(file_path, qr, code, X=1465, Y=379)
+
+if os.path.exists(tx_hash_file):
+    os.remove(tx_hash_file)
 
 print("\n===================================")
 print("\nAll certificates issued!")
