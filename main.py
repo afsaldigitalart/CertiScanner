@@ -1,7 +1,7 @@
 import os
 import json
-from BlockFunctions import Helper
-from BlockChain import BlockChain
+from core import BlockFunctions
+from core import BlockChain
 
 folder_path = r"Certificates/"
 event_name = "Chatbot Building and Ideation"
@@ -10,8 +10,9 @@ issued_by = "Inspira IEDC CSE, Marian Engineering College"
 PREFIX = "CHT"
 tx_hash_file = 'tx_hashes.json'
 
-bf = Helper()
-bc = BlockChain()
+bf = BlockFunctions.Helper()
+bc = BlockChain.BlockChain()
+
 
 if os.path.exists(tx_hash_file):
     with open(tx_hash_file, 'r') as f:
