@@ -11,7 +11,7 @@ AMOY_URL = os.getenv("AMOY_URL")
 CONTRACT_ADDRESS = os.getenv("CONTRACT_ADDRESS")
 
 web3 = Web3(Web3.HTTPProvider(AMOY_URL))
-print("✅ Connected to blockchain:", web3.is_connected())
+print("Connected to blockchain:", web3.is_connected())
 
 with open("abi.json") as f:
     abi = json.load(f)
@@ -35,8 +35,10 @@ def verify_certificate():
         return send_from_directory("front_end", "invalid.html")
 
     try:
-        with open("temp.txt", "r") as f:
-            tx_hash = f.readline().strip()
+        with open("tx_hashes.json", "r") as f:
+            tx_map = json.load(f)
+            tx_hash = tx_map.get(code, "")
+
 
         cert_data = contract.functions.verifyCertificate(code).call()
 
@@ -69,7 +71,7 @@ def verify_certificate():
         return html
         
     except Exception as e:
-        print("⚠️ Error verifying certificate:", e)
+        print("Error verifying certificate:", e)
         return send_from_directory("front_end", "invalid.html")
 
 
