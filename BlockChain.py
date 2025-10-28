@@ -6,13 +6,13 @@ class BlockChain:
     
     def __init__(self):
         load_dotenv()
-        self.INFURA_URL = os.getenv("INFURA_URL")
+        self.AMOY_URL = os.getenv("AMOY_URL")
         self.PRIVATE_KEY = os.getenv("PRIVATE_KEY")
         self.WALLET_ADDRESS = Web3.to_checksum_address(os.getenv("WALLET_ADDRESS"))
         self.CONTRACT_ADDRESS = Web3.to_checksum_address(os.getenv("CONTRACT_ADDRESS"))
 
 
-        self.web3 = Web3(Web3.HTTPProvider(self.INFURA_URL))
+        self.web3 = Web3(Web3.HTTPProvider(self.AMOY_URL))
         print("Connected:", self.web3.is_connected())
 
         if not self.web3.is_connected():
@@ -34,7 +34,8 @@ class BlockChain:
             'from': self.WALLET_ADDRESS,
             'nonce': nonce,
             'gas': 400000,
-            'gasPrice': self.web3.to_wei('5', 'gwei')
+            'maxFeePerGas': self.web3.to_wei('30', 'gwei'),
+            'maxPriorityFeePerGas': self.web3.to_wei('25', 'gwei'),
         })
 
         signed_txn = self.web3.eth.account.sign_transaction(txn, private_key=self.PRIVATE_KEY)

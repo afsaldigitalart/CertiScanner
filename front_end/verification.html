@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Certificate Verified</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveBackground 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes moveBackground {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(50px, 50px);
+            }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+            animation: fadeInScale 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            max-width: 540px !important;
+            width: 90% !important;
+            padding: 3rem 2.5rem !important;
+            border-radius: 24px !important;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #10b981, #059669, #10b981);
+            background-size: 200% 100%;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.9) translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .icon {
+            font-size: 4rem;
+            animation: successPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.2s both;
+            filter: drop-shadow(0 4px 8px rgba(16, 185, 129, 0.3));
+        }
+
+        @keyframes successPop {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2) rotate(10deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            color: #10b981;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1.9rem !important;
+            margin-bottom: 1.5rem !important;
+            margin-top: 1rem !important;
+            animation: slideInDown 0.6s ease-out 0.3s both;
+        }
+
+        @keyframes slideInDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 16px;
+            padding: 1.75rem;
+            margin-top: 1rem !important;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #667eea, #764ba2, #10b981);
+            border-radius: 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .card:hover::before {
+            opacity: 0.1;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card p {
+            margin: 1rem 0 !important;
+            word-wrap: break-word;
+            color: #4a5568;
+            line-height: 1.7;
+            animation: slideInRight 0.5s ease-out both;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .card p:last-child {
+            border-bottom: none;
+        }
+
+        .card p:hover {
+            padding-left: 8px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 8px;
+            border-bottom-color: #667eea;
+        }
+
+        .card p:nth-child(1) { animation-delay: 0.5s; }
+        .card p:nth-child(2) { animation-delay: 0.55s; }
+        .card p:nth-child(3) { animation-delay: 0.6s; }
+        .card p:nth-child(4) { animation-delay: 0.65s; }
+        .card p:nth-child(5) { animation-delay: 0.7s; }
+        .card p:nth-child(6) { animation-delay: 0.75s; }
+        .card p:nth-child(7) { animation-delay: 0.8s; }
+        .card p:nth-child(8) { animation-delay: 0.85s; }
+
+        @keyframes slideInRight {
+            0% {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .card p strong {
+            color: #2d3748;
+            font-weight: 600;
+            display: inline-block;
+            min-width: 140px;
+        }
+
+        .card p small {
+            color: #718096;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .card a {
+            color: #667eea;
+            text-decoration: none;
+            word-break: break-all;
+            transition: all 0.3s ease;
+            position: relative;
+            font-weight: 500;
+        }
+
+        .card a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .card a:hover {
+            color: #764ba2;
+        }
+
+        .card a:hover::after {
+            width: 100%;
+        }
+
+        a.btn {
+            display: inline-block !important;
+            margin-top: 2rem !important;
+            padding: 16px 40px !important;
+            border-radius: 12px !important;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: white !important;
+            text-decoration: none !important;
+            font-weight: 600 !important;
+            font-size: 1.05rem;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.6s ease-out 0.9s both;
+        }
+
+        a.btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        a.btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        a.btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+        }
+
+        a.btn:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 10px;
+            }
+
+            body::before {
+                background-size: 30px 30px;
+            }
+
+            .container {
+                padding: 2rem 1.25rem !important;
+                border-radius: 16px !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+
+            h1 {
+                font-size: 1.5rem !important;
+                margin-top: 0.75rem !important;
+                margin-bottom: 1.25rem !important;
+            }
+
+            .icon {
+                font-size: 2.75rem !important;
+            }
+
+            .card {
+                padding: 1rem;
+                border-radius: 12px;
+            }
+
+            .card p {
+                font-size: 0.875rem;
+                margin: 0.7rem 0 !important;
+                padding: 0.4rem 0;
+                line-height: 1.6;
+            }
+
+            .card p:hover {
+                padding-left: 6px;
+            }
+
+            .card p strong {
+                display: block;
+                min-width: auto;
+                margin-bottom: 0.35rem;
+                font-size: 0.85rem;
+            }
+
+            .card a {
+                font-size: 0.8rem;
+                display: inline-block;
+                margin-top: 0.25rem;
+            }
+
+            a.btn {
+                padding: 14px 28px !important;
+                font-size: 0.95rem !important;
+                margin-top: 1.5rem !important;
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .container {
+                padding: 1.5rem 1rem !important;
+            }
+
+            h1 {
+                font-size: 1.35rem !important;
+            }
+
+            .icon {
+                font-size: 2.5rem !important;
+            }
+
+            .card {
+                padding: 0.875rem;
+            }
+
+            .card p {
+                font-size: 0.8rem;
+                margin: 0.6rem 0 !important;
+            }
+
+            .card p strong {
+                font-size: 0.8rem;
+            }
+
+            a.btn {
+                padding: 12px 24px !important;
+                font-size: 0.9rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container success">
+        <div class="icon">✅</div>
+        <h1>Certificate Verified</h1>
+        <div class="card">
+            <p><strong>Name:</strong> {name}</p>
+            <p><strong>Unique Code:</strong> {cert_code}</p>
+            <p><strong>Event:</strong> {eventname}</p>
+            <p><strong>Date:</strong> {eventdate}</p>
+            <p><strong>Issued By:</strong> {issuedBy}</p>
+            <p><strong>Issuer Address:</strong> {issuer}</p>
+            <p><small>Transaction:</small> 
+                <a href="https://sepolia.etherscan.io/tx/{tx_hash}" target="_blank">{tx_hash}</a>
+            </p>
+            <p><small>Timestamp:</small> {timestamp}</p>
+            
+        </div>
+        <a href="/" class="btn">Verify Another</a>
+    </div>
+</body>
+</html>

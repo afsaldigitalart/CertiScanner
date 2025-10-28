@@ -7,10 +7,10 @@ load_dotenv()
 
 app = Flask(__name__, static_folder="front_end", static_url_path="")
 
-INFURA_URL = os.getenv("INFURA_URL")
+AMOY_URL = os.getenv("AMOY_URL")
 CONTRACT_ADDRESS = os.getenv("CONTRACT_ADDRESS")
 
-web3 = Web3(Web3.HTTPProvider(INFURA_URL))
+web3 = Web3(Web3.HTTPProvider(AMOY_URL))
 print("✅ Connected to blockchain:", web3.is_connected())
 
 with open("abi.json") as f:
@@ -54,36 +54,20 @@ def verify_certificate():
         if not valid or cert_code == "":
             return send_from_directory("front_end", "invalid.html")
 
-        return f"""
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>Certificate Verified</title>
-            <link rel="stylesheet" href="/style.css">
-        </head>
-        <body>
-            <div class="container success">
-                <div class="icon">✅</div>
-                <h1>Certificate Verified</h1>
-                <div class="card">
-                    <p><strong>Name:</strong> {name}</p>
-                    <p><strong>Unique Code:</strong> {cert_code}</p>
-                    <p><strong>Event:</strong> {eventname}</p>
-                    <p><strong>Date:</strong> {eventdate}</p>
-                    <p><strong>Issued By:</strong> {issuedBy}</p>
-                    <p><strong>Issuer Address:</strong> {issuer}</p>
-                    <p><small>Timestamp:</small> {timestamp}</p>
-                    <p><small>Transaction:</small> 
-                        <a href="https://sepolia.etherscan.io/tx/{tx_hash}" target="_blank">{tx_hash}</a>
-                    </p>
-                </div>
-                <a href="/" class="btn">Verify Another</a>
-            </div>
-        </body>
-        </html>
-        """
+        with open("front_end/verification.html", "r", encoding="utf-8") as f:
+            template = f.read()
+        
+        html = template.replace("{name}", name)\
+                       .replace("{cert_code}", cert_code)\
+                       .replace("{eventname}", eventname)\
+                       .replace("{eventdate}", eventdate)\
+                       .replace("{issuedBy}", issuedBy)\
+                       .replace("{issuer}", issuer)\
+                       .replace("{timestamp}", str(timestamp))\
+                       .replace("{tx_hash}", tx_hash)
+        
+        return html
+        
     except Exception as e:
         print("⚠️ Error verifying certificate:", e)
         return send_from_directory("front_end", "invalid.html")
@@ -97,7 +81,6 @@ def static_files(path):
 
 @app.errorhandler(404)
 def not_found(e):
-
     return send_from_directory("front_end", "invalid.html")
 
 if __name__ == "__main__":
