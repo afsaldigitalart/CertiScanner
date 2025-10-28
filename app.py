@@ -34,15 +34,12 @@ def verify_certificate():
     if not code:
         return send_from_directory("front_end", "invalid.html")
 
-    try:
-        with open("tx_hashes.json", "r") as f:
-            tx_map = json.load(f)
-            tx_hash = tx_map.get(code, "")
 
 
-        cert_data = contract.functions.verifyCertificate(code).call()
 
-        (
+    cert_data = contract.functions.verifyCertificate(code).call()
+
+    (
             name,
             cert_code,
             eventname,
@@ -53,26 +50,22 @@ def verify_certificate():
             valid
         ) = cert_data
 
-        if not valid or cert_code == "":
-            return send_from_directory("front_end", "invalid.html")
+    if not valid or cert_code == "":
+        return send_from_directory("front_end", "invalid.html")
 
-        with open("front_end/verification.html", "r", encoding="utf-8") as f:
-            template = f.read()
+    with open("front_end/verification.html", "r", encoding="utf-8") as f:
+        template = f.read()
         
-        html = template.replace("{name}", name)\
+    html = template.replace("{name}", name)\
                        .replace("{cert_code}", cert_code)\
                        .replace("{eventname}", eventname)\
                        .replace("{eventdate}", eventdate)\
                        .replace("{issuedBy}", issuedBy)\
                        .replace("{issuer}", issuer)\
-                       .replace("{timestamp}", str(timestamp))\
-                       .replace("{tx_hash}", tx_hash)
+                       .replace("{timestamp}", str(timestamp))
         
-        return html
+    return html
         
-    except Exception as e:
-        print("Error verifying certificate:", e)
-        return send_from_directory("front_end", "invalid.html")
 
 
 

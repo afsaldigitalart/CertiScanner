@@ -8,7 +8,7 @@ event_name = "Chatbot Building and Ideation"
 event_date = "18/09/2025"
 issued_by = "Inspira IEDC CSE, Marian Engineering College"
 PREFIX = "CHT"
-tx_hash_file = 'tx_hashes.json'
+tx_hash_file = 'LOGtx_hashes.json'
 
 bf = BlockFunctions.Helper()
 bc = BlockChain.BlockChain()
@@ -43,8 +43,6 @@ for file in os.listdir(folder_path):
     qr = bf.makeQR(f"https://certiscanner.onrender.com/verify?code={code}")
     bf.placeQR(file_path, qr, code, X=1465, Y=379)
 
-if os.path.exists(tx_hash_file):
-    os.remove(tx_hash_file)
 
 print("\n===================================")
 print("\nAll certificates issued!")
