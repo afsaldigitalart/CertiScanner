@@ -48,12 +48,10 @@ def verify_certificate():
             valid
         ) = cert_data
 
-        # If not valid or code mismatch
         if not valid or cert_code.strip() == "":
             print(f"Invalid certificate or empty code for {code}")
             return send_from_directory("front_end", "invalid.html")
 
-        # Build page
         with open("front_end/verification.html", "r", encoding="utf-8") as f:
             template = f.read()
 
@@ -70,7 +68,7 @@ def verify_certificate():
         return html
 
     except Exception as e:
-        print(f"⚠️ Error verifying certificate: {e}")
+        print(f"Error verifying certificate: {e}")
         return send_from_directory("front_end", "invalid.html")
 
 
