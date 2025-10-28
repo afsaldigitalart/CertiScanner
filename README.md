@@ -1,4 +1,4 @@
-# ⫘⫘⫘ CertiChain ⫘⫘⫘
+# ⫘⫘ CertiChain ⫘⫘
 
 CertiChain is a blockchain-based certificate issuing and verification system.\
 It allows organizations to **issue verifiable certificates** on-chain, generate **QR-embedded digital certificates**, and host a **web verification portal** for authenticity checks.
