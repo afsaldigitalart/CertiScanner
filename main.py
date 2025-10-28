@@ -42,8 +42,7 @@ for file in os.listdir(folder_path):
     
     qr = bf.makeQR(f"https://certiscanner.onrender.com/verify?code={code}")
     bf.placeQR(file_path, qr, code, X=1465, Y=379)
-
-
+    
 print("\n===================================")
 print("\nAll certificates issued!")
 print("\n===================================")

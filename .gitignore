@@ -3,3 +3,4 @@ __pycache__/
 .vscode/
 generated/
 Certificates/
+LOGtx_hashes.json

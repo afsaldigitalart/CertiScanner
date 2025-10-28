@@ -35,7 +35,7 @@ class BlockChain:
             'nonce': nonce,
             'gas': 400000,
             'maxFeePerGas': self.web3.to_wei('30', 'gwei'),
-            'maxPriorityFeePerGas': self.web3.to_wei('25', 'gwei'),
+            'maxPriorityFeePerGas': self.web3.to_wei('25', 'gwei')
         })
 
         signed_txn = self.web3.eth.account.sign_transaction(txn, private_key=self.PRIVATE_KEY)
