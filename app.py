@@ -28,18 +28,16 @@ def home():
 
 
 @app.route("/verify", methods=["GET"])
+
 def verify_certificate():
     code = request.args.get("code")
 
     if not code:
         return send_from_directory("front_end", "invalid.html")
 
-
-
-
-    cert_data = contract.functions.verifyCertificate(code).call()
-
-    (
+    try:
+        cert_data = contract.functions.verifyCertificate(code).call()
+        (
             name,
             cert_code,
             eventname,
@@ -50,28 +48,31 @@ def verify_certificate():
             valid
         ) = cert_data
 
-    if not valid or cert_code == "":
+        # If not valid or code mismatch
+        if not valid or cert_code.strip() == "":
+            print(f"Invalid certificate or empty code for {code}")
+            return send_from_directory("front_end", "invalid.html")
+
+        # Build page
+        with open("front_end/verification.html", "r", encoding="utf-8") as f:
+            template = f.read()
+
+        html = (
+            template.replace("{name}", name)
+            .replace("{cert_code}", cert_code)
+            .replace("{eventname}", eventname)
+            .replace("{eventdate}", eventdate)
+            .replace("{issuedBy}", issuedBy)
+            .replace("{issuer}", issuer)
+            .replace("{timestamp}", str(timestamp))
+        )
+
+        return html
+
+    except Exception as e:
+        print(f"⚠️ Error verifying certificate: {e}")
         return send_from_directory("front_end", "invalid.html")
 
-    with open("front_end/verification.html", "r", encoding="utf-8") as f:
-        template = f.read()
-        
-    html = template.replace("{name}", name)\
-                       .replace("{cert_code}", cert_code)\
-                       .replace("{eventname}", eventname)\
-                       .replace("{eventdate}", eventdate)\
-                       .replace("{issuedBy}", issuedBy)\
-                       .replace("{issuer}", issuer)\
-                       .replace("{timestamp}", str(timestamp))
-        
-    return html
-        
-
-
-
-@app.route("/<path:path>")
-def static_files(path):
-    return send_from_directory("front_end", path)
 
 
 @app.errorhandler(404)
